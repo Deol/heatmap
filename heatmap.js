@@ -2,7 +2,7 @@ var HeatMap = (function () {
   // default config
   var defaultConfig = {
       blur: 0.75,
-      radius: 40,
+      radius: [10, 20],
       gradient: {0.25: 'rgb(0,0,0)', 0.55: 'rgb(0,255,0)', 0.85: 'yellow', 1.0: 'rgb(255,0,0)'}
     },
     palette = null,
@@ -67,7 +67,7 @@ var HeatMap = (function () {
         
     arr.map(function (item) {
       var v = item.value || 1,
-        r = item.radius || getRadius(v, min, max),
+        r = item.radius || getRadius(v, min, max, cfg.radius[0], cfg.radius[1]),
         b = item.blur || cfg.blur,
         x = item.x - r,
         y = item.y - r
@@ -82,15 +82,6 @@ var HeatMap = (function () {
     yRange.sort((a, b) => (a - b))
     
     len = xRange.length
-    
-    // document.body.appendChild(shadowCanvas)
-    // shadowCanvas.style.position = 'absolute'
-    // shadowCanvas.style.zIndex = 1000
-    // shadowCanvas.style.top = '121px'
-    // shadowCanvas.style.left = '21px'
-    // shadowCanvas.style.opacity = 0.5
-    // shadowCanvas.style.background = '#fff'
-    // console.log(xRange, yRange, Math.max(0, xRange[0]), Math.max(0, yRange[0]), Math.min(width, xRange[len - 1]), Math.min(height, yRange[len - 1]))
     
     let img = sctx.getImageData(Math.max(0, xRange[0]), Math.max(0, yRange[0]), Math.min(width, xRange[len - 1]), Math.min(height, yRange[len - 1])),
       data = img.data,
@@ -134,14 +125,14 @@ var HeatMap = (function () {
     return canvas
   }
   
-  // 半径范围在 10 - 20 之间
-  function getRadius (v, min, max) {
+  // 默认半径范围在 10 - 20 之间
+  function getRadius (v, min, max, rmin, rmax) {
     var range = max === min ? (v) : (max - min),
       val = v - min,
-      pxRange = 20 - 10,
+      pxRange = rmax - rmin,
       result = 0
     
-    result = Math.ceil(10 + pxRange * (val / range))
+    result = Math.ceil(rmin + pxRange * (val / range))
  
     return result
   }
