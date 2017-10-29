@@ -1,9 +1,9 @@
 # heatmap
 热力图渲染插件
 
-本款插件可以用于渲染热力图，特别适合绘制由点击量形成的热力图。
+本款插件可以用于渲染热力图，效果：
 
-效果：![热力图效果](https://user-images.githubusercontent.com/2509085/32117445-f5d964a6-bb80-11e7-9d32-d055850096c3.jpg)
+![热力图效果](https://user-images.githubusercontent.com/2509085/32117445-f5d964a6-bb80-11e7-9d32-d055850096c3.jpg)
 
 ## 安装
 
@@ -63,6 +63,8 @@ gradient: {0.25: 'rgb(0,0,0)', 0.55: 'rgb(0,255,0)', 0.85: 'yellow', 1.0: 'rgb(2
 ```
 
 ## 热力图生成原理
+
+本插件使用的原理与 [pa7/heatmap.js](https://github.com/pa7/heatmap.js) 项目基本相同，欲了解详细可查看我写的一篇文章：
 
 [传送门](https://github.com/ajccom/blog/issues/2)
 
