@@ -22,6 +22,18 @@ var HeatMap = (function () {
     return extend(userConfig || {}, defaultConfig)
   }
   
+  function clean () {
+    var div = document.createElement('div'), item = ''
+    
+    for (item in shadowCanvasMap) {
+      div.appendChild(shadowCanvasMap[item])
+    }
+        
+    shadowCanvasMap = {}
+    
+    div.innerHTML = ''
+  }
+  
   /**
    * @param {Object} ctx
    * @param {Object} data 
@@ -36,7 +48,8 @@ var HeatMap = (function () {
   function render (ctx, data, cfg) {
     var canvas = ctx.canvas,
       w = canvas.width,
-      h = canvas.height
+      h = canvas.height,
+      sctx = shadowCanvas.getContext('2d')
     
     shadowCanvas.width = w
     shadowCanvas.height = h
@@ -46,6 +59,7 @@ var HeatMap = (function () {
     if (!data) {console.log('There is data needed to fill heat map.'); return}
     
     ctx.clearRect(0, 0, w, h)
+    sctx.clearRect(0, 0, w, h)
     
     setPalette(cfg.gradient)
     
@@ -55,6 +69,8 @@ var HeatMap = (function () {
   function drawShadowCanvas (ctx, arr, cfg, width, height) {
     var max = 0, min = 0, temp = [], sctx = shadowCanvas.getContext('2d'),
       xRange = [], yRange = [], len = arr.length
+    
+    if (!arr || !arr.length) {return}
     
     arr.map(function (item) {
       temp.push(item.value || 1)
@@ -99,6 +115,8 @@ var HeatMap = (function () {
     
     img.data.set(data)
     ctx.putImageData(img, Math.max(0, xRange[0]), Math.max(0, yRange[0]))
+    
+    clean()
   }
   
   function drawPoint (radius, blur) {
@@ -125,7 +143,7 @@ var HeatMap = (function () {
     return canvas
   }
   
-  // 默认半径范围在 10 - 20 之间
+  // 半径范围在 10 - 20 之间
   function getRadius (v, min, max, rmin, rmax) {
     var range = max === min ? (v) : (max - min),
       val = v - min,
