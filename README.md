@@ -14,7 +14,7 @@
 or 
 
 ```javascript
-import './heatmap'
+import HeatMap from './heatmap'
 ```
 
 ## 用法
