@@ -138,8 +138,7 @@ var HeatMap = (function () {
     gradient.addColorStop(0, 'rgba(0, 0, 0, 1)')
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
     
-    // 在 firefox 57 下测试，发现此处设置透明并将圆渲染在父 canvas 时，获取图像数据和未设置透明时相同，无法体现透明数据；
-    // 而对父 canvas 设置透明后获取的图像数据是实际透明后的数据，很奇怪；
+    // 在 firefox 57 下测试，发现径向渐变无法配合 globalAlpha 使用，globalAlpha 失效
     // ctx.globalAlpha = 0.5
     
     ctx.fillStyle = gradient
