@@ -72,6 +72,9 @@ var HeatMap = (function () {
     
     if (!arr || !arr.length) {return}
     
+    // 调整透明度可以调整整体效果
+    sctx.globalAlpha = 0.5
+    
     arr.map(function (item) {
       temp.push(item.value || 1)
     })
@@ -104,7 +107,7 @@ var HeatMap = (function () {
       l = data.length, alpha = 0, offset = 0
 
     for (let i = 0; i < l; i += 4) {
-      alpha = data[i + 3] + 1
+      alpha = Math.min(data[i + 3] + 1, 255)
       offset = alpha * 4
       
       data[i] = palette[offset]
@@ -134,7 +137,11 @@ var HeatMap = (function () {
     let gradient = ctx.createRadialGradient(radius, radius, 1 - blur, radius, radius, radius)
     gradient.addColorStop(0, 'rgba(0, 0, 0, 1)')
     gradient.addColorStop(1, 'rgba(0, 0, 0, 0)')
-    ctx.globalAlpha = 0.5
+    
+    // 在 firefox 57 下测试，发现此处设置透明并将圆渲染在父 canvas 时，获取图像数据和未设置透明时相同，无法体现透明数据；
+    // 而对父 canvas 设置透明后获取的图像数据是实际透明后的数据，很奇怪；
+    // ctx.globalAlpha = 0.5
+    
     ctx.fillStyle = gradient
     ctx.fillRect(0, 0, l, l)
     
